@@ -1,0 +1,14 @@
+#canva
+{
+    width: auto;
+    height: auto;
+}
+
+@media (max-width:520px)
+{
+    #canva
+    {
+        width: 320px;
+        height: 200px;
+    }
+}
