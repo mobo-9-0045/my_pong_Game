@@ -27,14 +27,15 @@ const GameP5: React.FC = () =>
 		{
 			const rightPadlleTop = p.mouseY;
 			const rightPadlleBottom = p.mouseY + (rightPadlle.height);
-			const leftPaddleTop = leftPadlle.y - (leftPadlle.height / 2);
-			const leftPaddleButtom = leftPadlle.y + (leftPadlle.height / 2);
+			const leftPaddleTop = leftPadlle.y;
+			const leftPaddleButtom = leftPadlle.y + leftPadlle.height;
 			this.y += this.vy;
 			this.x += this.vx;
 			if (this.y - (this.r / 2) < 0 || (this.y + (this.r / 2)) > canvaHeight)
 				this.vy *= -1;
 			if ((this.x + (this.r / 2) > rightPadlle.x) && (this.y > rightPadlleTop) && (this.y < rightPadlleBottom))
 				this.vx *= -1;
+			console.log(`leftPaddleButtom = ${leftPaddleButtom} leftPaddleTop = ${leftPaddleTop} diff = ${leftPaddleTop - leftPaddleButtom}`);
 			console.log((this.x - (this.r / 2) == leftPadlle.x), (this.y > leftPaddleTop), (this.y < leftPaddleButtom));
 			if ((this.x - (this.r / 2) == leftPadlle.x) && (this.y > leftPaddleTop) && (this.y < leftPaddleButtom))
 				this.vx *= -1;
