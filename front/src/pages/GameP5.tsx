@@ -17,8 +17,8 @@ const GameP5: React.FC = () =>
 		r:20,
 		x : canvaWidth / 2,
 		y : canvaHeight / 2,
-		vx :5,
-		vy :5,
+		vx :7,
+		vy :4,
 		draw : function draw(p:any):void
 		{
 			p.ellipse(this.x, this.y, this.r, this.r);
