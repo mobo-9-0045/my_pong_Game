@@ -25,8 +25,8 @@ const GameP5: React.FC = () =>
 		},
 		update : function update(p:any):void
 		{
-			const rightPadlleTop = p.mouseY;
-			const rightPadlleBottom = p.mouseY + (rightPadlle.height);
+			const rightPadlleTop = rightPadlle.y;
+			const rightPadlleBottom = rightPadlle.y + (rightPadlle.height);
 			const leftPaddleTop = leftPadlle.y;
 			const leftPaddleButtom = leftPadlle.y + leftPadlle.height;
 			this.y += this.vy;
@@ -35,8 +35,6 @@ const GameP5: React.FC = () =>
 				this.vy *= -1;
 			if ((this.x + (this.r / 2) > rightPadlle.x) && (this.y > rightPadlleTop) && (this.y < rightPadlleBottom))
 				this.vx *= -1;
-			console.log(`leftPaddleButtom = ${leftPaddleButtom} leftPaddleTop = ${leftPaddleTop} diff = ${leftPaddleTop - leftPaddleButtom}`);
-			console.log((this.x - (this.r / 2) == leftPadlle.x), (this.y > leftPaddleTop), (this.y < leftPaddleButtom));
 			if ((this.x - (this.r / 2) == leftPadlle.x) && (this.y > leftPaddleTop) && (this.y < leftPaddleButtom))
 				this.vx *= -1;
 			if (this.x - (this.r / 2) < 0)
@@ -72,9 +70,10 @@ const GameP5: React.FC = () =>
 		x :canvaWidth - 10,
 		width:10,
 		height:150,
+		y:canvaHeight / 2,
 		draw : function draw(p:any)
 		{
-			p.rect(this.x, p.mouseY, this.width, this.height);
+			p.rect(this.x, this.y, this.width, this.height);
 		}
 	}
 	const setup = (p : any, canvasParentRef : Element) =>
@@ -126,7 +125,25 @@ const GameP5: React.FC = () =>
 			setShow(true);
 			StopBall();
 		}
+		document.addEventListener('keydown', detectKey, true);
+		return () =>
+		{
+			document.addEventListener('keydown', detectKey, true);
+		};
 	}, [score, opscore]);
+	const detectKey = (e:KeyboardEvent) =>
+	{
+		if (e.key == "ArrowUp")
+		{
+			console.log(`${e.key} Pressed`);
+			rightPadlle.y = rightPadlle.y - 35;
+		}
+		if (e.key == "ArrowDown")
+		{
+			console.log(`${e.key} Pressed`);
+			rightPadlle.y = rightPadlle.y + 35;
+		}
+	}
 	const StopBall = ():void =>
 	{
 		ball.vx = 0;
