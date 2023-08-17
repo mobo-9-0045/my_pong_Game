@@ -8,17 +8,32 @@ const GameP5: React.FC = () =>
 {
 	const [score, setScore] = useState(0);
 	const [opscore, setOpScore] = useState(0);
+	const aspectRatio = 16 / 9;
+  const maxCanvasWidth = window.innerWidth * 0.8;
+  const maxCanvasHeight = window.innerHeight * 0.8;
+	let canvaWidth : number;
+	let canvaHeight : number;
 	let my_canva:any;
-	const canvaWidth : number = 1000;
-	const canvaHeight : number = 500;
+	if (maxCanvasWidth / aspectRatio <= maxCanvasHeight)
+	{
+		canvaWidth = maxCanvasWidth;
+		canvaHeight = canvaWidth / aspectRatio;
+	}
+	else
+	{
+		canvaHeight = maxCanvasHeight;
+		canvaWidth = canvaHeight * aspectRatio;
+	}
+	const canvaX = (window.innerWidth - canvaWidth) / 2;
+	const canvaY = (window.innerHeight - canvaHeight) / 2;
 	//Ball
 	const ball = 
 	{
-		r:20,
+		r:0.02 * canvaWidth,
 		x : canvaWidth / 2,
 		y : canvaHeight / 2,
 		vx :7,
-		vy :4,
+		vy :2,
 		draw : function draw(p:any):void
 		{
 			p.ellipse(this.x, this.y, this.r, this.r);
@@ -33,9 +48,9 @@ const GameP5: React.FC = () =>
 			this.x += this.vx;
 			if (this.y - (this.r / 2) < 0 || (this.y + (this.r / 2)) > canvaHeight)
 				this.vy *= -1;
-			if ((this.x + (this.r / 2) > rightPadlle.x) && (this.y > rightPadlleTop) && (this.y < rightPadlleBottom))
+			if ((this.x + (this.r / 2) >= rightPadlle.x) && (this.y > rightPadlleTop) && (this.y < rightPadlleBottom))
 				this.vx *= -1;
-			if ((this.x - (this.r / 2) == leftPadlle.x) && (this.y > leftPaddleTop) && (this.y < leftPaddleButtom))
+			if ((this.x - (this.r / 2) <= leftPadlle.x + leftPadlle.width) && (this.y > leftPaddleTop) && (this.y < leftPaddleButtom))
 				this.vx *= -1;
 			if (this.x - (this.r / 2) < 0)
 			{
@@ -52,10 +67,11 @@ const GameP5: React.FC = () =>
 		}
 
 	}
+
 	const leftPadlle =
 	{
-		width:10,
-		height:150,
+		width:canvaWidth * 0.01,
+		height:canvaHeight * 0.3,
 		x:0,
 		y:Math.random() * (canvaHeight - 150),
 		draw : function draw(p:any)
@@ -64,22 +80,28 @@ const GameP5: React.FC = () =>
 			p.rect(this.x, this.y, this.width, this.height);
 		}
 	}
+
 	//RightPadle
+	const rightPadlleWidth = canvaWidth * 0.01;
 	const rightPadlle = 
 	{
-		x :canvaWidth - 10,
-		width:10,
-		height:150,
+		x :canvaWidth - rightPadlleWidth,
+		width:canvaWidth * 0.01,
+		height:canvaHeight * 0.3,
 		y:canvaHeight / 2,
 		draw : function draw(p:any)
 		{
 			p.rect(this.x, this.y, this.width, this.height);
 		}
 	}
+
 	const setup = (p : any, canvasParentRef : Element) =>
 	{
 		my_canva = p.createCanvas(canvaWidth, canvaHeight).parent(canvasParentRef);
+		my_canva.position(canvaX, canvaY);
+		my_canva.parent(canvasParentRef);
 	};
+
 	let updateInterval = 60;
 	const draw = (p:any) =>
 	{
@@ -150,8 +172,10 @@ const GameP5: React.FC = () =>
 		ball.vy = 0;
 	}
 	return (
-		<>
-			<h1>{opscore} - {score}</h1>
+		<div className="game-container">
+			<div className="score-container">
+      	<h1>{opscore} - {score}</h1>
+    	</div>
 			{score == 2 || opscore == 2
 				?
 				<Modal show={show} backdrop="static" keyboard={false} animation={true}>
@@ -173,7 +197,7 @@ const GameP5: React.FC = () =>
 				</Modal> : ""
 			}
 			<Sketch setup={setup} draw={draw}/>
-		</>
+		</div>
 	);
 }
 export default GameP5;
